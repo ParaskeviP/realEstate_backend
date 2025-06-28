@@ -37,8 +37,8 @@ pipeline {
                    # replace dbserver in host_vars
                      sed -i 's/dbserver/localhost/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
                      # replace ip in group_vars for the frontend and backend vms public ip
-                     sed -i 's/192.168.56.101/20.90.114.247/g' ~/workspace/ansible/group_vars/appservers.yaml
-                     sed -i 's/192.168.56.103/20.117.104.215/g' ~/workspace/ansible/group_vars/appservers.yaml
+                     sed -i 's/192.168.56.101/20.238.17.90/g' ~/workspace/ansible/group_vars/appservers.yaml
+                     sed -i 's/192.168.56.103/74.178.89.110/g' ~/workspace/ansible/group_vars/appservers.yaml
                 '''
                 sh '''
                     # edit host var for appserver
@@ -52,7 +52,7 @@ pipeline {
        stage('Deploy frontend') {
             steps {
                 sh '''
-                   # sed -i 's/dbserver/20.90.114.247/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
+                   # sed -i 's/dbserver/20.238.17.90/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                     ansible-playbook -i ~/workspace/ansible/hosts.yaml -l frontend-vm ~/workspace/ansible/playbooks/vuejs.yaml
                 '''
