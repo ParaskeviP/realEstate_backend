@@ -16,4 +16,6 @@ public interface OwnerRepo extends JpaRepository<Owner, Integer> {
     Boolean existsByEmail(String email);
 
     Owner getOwnerByUser(User user);
+
+    boolean existsByUserUsername(String username);
 }

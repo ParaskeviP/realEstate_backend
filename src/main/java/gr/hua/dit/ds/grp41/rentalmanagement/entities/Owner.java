@@ -33,12 +33,12 @@ public class Owner {
             name="owner_property",
             joinColumns = @JoinColumn(name="owner_id"),
             inverseJoinColumns = @JoinColumn(name="property_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"owner_id", "propert_id"})
+            uniqueConstraints = @UniqueConstraint(columnNames = {"owner_id", "property_id"})
     )
     private List<Property> properties;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="user_id")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
 

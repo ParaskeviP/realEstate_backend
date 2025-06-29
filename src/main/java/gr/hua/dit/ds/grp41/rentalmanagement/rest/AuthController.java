@@ -18,10 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import gr.hua.dit.ds.grp41.rentalmanagement.configs.JwtUtils;
 import gr.hua.dit.ds.grp41.rentalmanagement.entities.Role;
@@ -51,8 +48,6 @@ public class AuthController {
         this.passEncoder=passEncoder;
         this.jwtUtils=jwtUtils;
     }
-
-
     @Autowired
     private TenantService tenantService;
 
@@ -61,29 +56,57 @@ public class AuthController {
 
     @PostConstruct
     public void setup() {
-
-
-        Role role_user=new Role("ROLE_TENANT");
-        Role role_admin=new Role("ROLE_ADMIN");
-        Role role_mod=new Role("ROLE_OWNER");
+        Role role_user = new Role("ROLE_TENANT");
+        Role role_admin = new Role("ROLE_ADMIN");
+        Role role_mod = new Role("ROLE_OWNER");
 
         roleRepo.updateOrInsert(role_user);
         roleRepo.updateOrInsert(role_admin);
         roleRepo.updateOrInsert(role_mod);
 
-
-        if(!userRepo.existsByUsername("admin1")){
-            Set<Role> roles=new HashSet<>();
+        // Admin creation
+        if (!userRepo.existsByUsername("admin1")) {
+            Set<Role> roles = new HashSet<>();
             Role adminRole = roleRepo.findByName("ROLE_ADMIN")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
-            User user = new User("admin1","admin@gmail.com", passEncoder.encode("123456"));
+            User user = new User("admin1", "admin@gmail.com", passEncoder.encode("123456"));
             user.setIsApproved(true);
             user.setRoles(roles);
             userRepo.save(user);
         }
 
+        // Test tenant creation
+        if (!userRepo.existsByUsername("test_tenant")) {
+            Set<Role> roles = new HashSet<>();
+            Role tenantRole = roleRepo.findByName("ROLE_TENANT")
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(tenantRole);
+            User tenantUser = new User("test_tenant", "tenant@test.com", passEncoder.encode("password"));
+            tenantUser.setIsApproved(true);
+            tenantUser.setRoles(roles);
+            userRepo.save(tenantUser);
 
+            Tenant tenant = new Tenant("John", "Doe", "tenant@test.com");
+            tenant.setUser(tenantUser);
+            tenantService.saveTenant(tenant);
+        }
+
+        // Test owner creation
+        if (!userRepo.existsByUsername("test_owner")) {
+            Set<Role> roles = new HashSet<>();
+            Role ownerRole = roleRepo.findByName("ROLE_OWNER")
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(ownerRole);
+            User ownerUser = new User("test_owner", "owner@test.com", passEncoder.encode("password"));
+            ownerUser.setIsApproved(true);
+            ownerUser.setRoles(roles);
+            userRepo.save(ownerUser);
+
+            Owner owner = new Owner("Alice", "Smith", "owner@test.com", "1234567890");
+            owner.setUser(ownerUser);
+            ownerService.saveOwner(owner);
+        }
     }
 
     @PostMapping("/signin")
@@ -131,11 +154,11 @@ public class AuthController {
         Set<Role> roles=new HashSet<>();
 
 
-        if (signUpRequest.getRole() == null) { //if the user role is not defined, it is a client
+        if (signUpRequest.getRole() == null) { 
             Role userRole = roleRepo.findByName("ROLE_TENANT")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } else { //if the user role is defined, it is either a doctor or an admin
+        } else { 
             for (String roleName : signUpRequest.getRole()) {
                 switch (roleName) {
                     case "ROLE_ADMIN":

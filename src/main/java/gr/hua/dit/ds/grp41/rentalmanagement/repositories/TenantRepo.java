@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TenantRepo extends JpaRepository<Tenant, Integer> {
     Tenant getTenantByUser(User user);
+
+    Boolean existsByEmail(String email);
+
+    boolean existsByUserUsername(String username);
 }
