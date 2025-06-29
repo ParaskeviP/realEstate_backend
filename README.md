@@ -1,4 +1,4 @@
-##Build project with Docker-compose
+## Build project with Docker-compose
 
 To start you must have docker and docker-compose installed on your system. Then you can simply run the command as is
 
@@ -6,11 +6,11 @@ To start you must have docker and docker-compose installed on your system. Then 
 docker-compose up -d
 ```
 
-##Build application with Jenkinsfile for ansible
+## Build application with Jenkinsfile for ansible
 
 You must first setup Jenkins on a vm and also download ansible
 
-##Build project with Kubernets
+## Build project with Kubernets
 
 After you setup a k8s-vm, you have to install microk8s
 
@@ -61,7 +61,7 @@ microk8s.kubectl apply -f k8s/vue/vue-ingress.yaml
 
 You can type in a browser http://ylision.ddns.net/ ,to see the project
 
-##Build project with Jenkins Docker
+## Build project with Jenkins Docker
 
 Download docker and after that execute the following commands on jenkins-vm
 
@@ -71,7 +71,7 @@ sudo usermod -aG docker jenkins
 sudo chmod 666 /var/run/docker.sock
 ```
 
-##Build project with Jenkins Kubernets
+## Build project with Jenkins Kubernets
 
 You setup a k8s virtual machine and we connect it with the Jenkins user by creating a new k8s host.
 You must have followed Jenkins with ansible and jenkins with docker steps first.
