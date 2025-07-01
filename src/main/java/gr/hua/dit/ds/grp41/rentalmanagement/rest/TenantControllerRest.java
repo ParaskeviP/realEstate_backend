@@ -35,6 +35,9 @@ public class TenantControllerRest {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private MailService mailService;
+
     @GetMapping("/showOwnedProperties")
     public List<Property> showOwnedProperties(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -129,8 +132,7 @@ public class TenantControllerRest {
         rentalRequest.setIsRentalRequest(false);
         tenantService.saveRequest(rentalRequest);
 
-        MailService mail = new MailService();
-        mail.sendMail("it2022040@hua.gr", "SUBJECT", "CONTEXT");
+        mailService.sendMail("it2022040@hua.gr", "SUBJECT", "CONTEXT");
         return ResponseEntity.ok("OK");
     }
 }
