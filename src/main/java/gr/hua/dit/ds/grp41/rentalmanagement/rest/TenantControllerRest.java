@@ -108,8 +108,8 @@ public class TenantControllerRest {
         rentalRequest.setOwner(owner);
         rentalRequest.setIsViewingApproved(false);
         rentalRequest.setIsRentalRequest(true);
-
         tenantService.saveRequest(rentalRequest);
+        mailService.sendMail(owner.getEmail(), "Rental request", "A user has requested to rent your property");
         return ResponseEntity.ok("OK");
     }
 
@@ -131,8 +131,7 @@ public class TenantControllerRest {
         //rentalRequest.setIsViewingApproved(false);
         rentalRequest.setIsRentalRequest(false);
         tenantService.saveRequest(rentalRequest);
-
-        mailService.sendMail("it2022040@hua.gr", "SUBJECT", "CONTEXT");
+        mailService.sendMail(owner.getEmail(), "Viewing request", "A user has requested to view your property");
         return ResponseEntity.ok("OK");
     }
 }

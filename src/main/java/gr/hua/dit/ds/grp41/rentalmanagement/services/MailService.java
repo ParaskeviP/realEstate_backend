@@ -1,16 +1,9 @@
 package gr.hua.dit.ds.grp41.rentalmanagement.services;
 
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.io.InputStream;
-import java.util.Properties;
 
 @Service
 public class MailService {
@@ -22,13 +15,12 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    public void sendMail(String to, String subject, String text) {
+    public void sendMail(String to, String subject, String context) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("vasiliskokotakis2004@gmail.com"); // Optional if set in application.properties
+        message.setFrom("vasiliskokotakis2004@gmail.com");
         message.setTo(to);
         message.setSubject(subject);
-        message.setText(text);
-
+        message.setText(context);
         mailSender.send(message);
     }
 }
