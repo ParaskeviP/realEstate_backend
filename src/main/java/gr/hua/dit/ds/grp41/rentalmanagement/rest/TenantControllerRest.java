@@ -2,10 +2,7 @@ package gr.hua.dit.ds.grp41.rentalmanagement.rest;
 
 import gr.hua.dit.ds.grp41.rentalmanagement.entities.*;
 import gr.hua.dit.ds.grp41.rentalmanagement.repositories.UserRepo;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.OwnerService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.PropertyService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.RequestService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.TenantService;
+import gr.hua.dit.ds.grp41.rentalmanagement.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -131,6 +128,9 @@ public class TenantControllerRest {
         //rentalRequest.setIsViewingApproved(false);
         rentalRequest.setIsRentalRequest(false);
         tenantService.saveRequest(rentalRequest);
+
+        MailService mail = new MailService();
+        mail.sendMail("it2022040@hua.gr", "SUBJECT", "CONTEXT");
         return ResponseEntity.ok("OK");
     }
 }

@@ -1,7 +1,7 @@
 package gr.hua.dit.ds.grp41.rentalmanagement.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -9,7 +9,8 @@ import java.util.List;
 @Schema(description = "List for emails")
 public class Mail {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private List<String> message;
 
     public List<String> getMessage(){
