@@ -3,6 +3,7 @@ package gr.hua.dit.ds.grp41.rentalmanagement.services;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
 public class MailService {
@@ -16,7 +17,7 @@ public class MailService {
     public void sendMail(String to, String subject, String context){
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom("it2022040@hua.gr");
+        message.setFrom("vasiliskokotakis2004@gmail.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(context);
