@@ -2,6 +2,7 @@ package gr.hua.dit.ds.grp41.rentalmanagement.rest;
 
 import gr.hua.dit.ds.grp41.rentalmanagement.entities.*;
 import gr.hua.dit.ds.grp41.rentalmanagement.repositories.UserRepo;
+import gr.hua.dit.ds.grp41.rentalmanagement.services.MailService;
 import gr.hua.dit.ds.grp41.rentalmanagement.services.OwnerService;
 import gr.hua.dit.ds.grp41.rentalmanagement.services.PropertyService;
 import gr.hua.dit.ds.grp41.rentalmanagement.services.RequestService;
@@ -31,6 +32,9 @@ public class OwnerControllerRest {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private MailService mailService;
 
     @PostMapping("/newProperty")
     public ResponseEntity<String> PropertyInsertion(@RequestBody Property property){
@@ -81,6 +85,8 @@ public class OwnerControllerRest {
         Request request = requestService.getById(requestid);
         request.setIsViewingApproved(true);
         requestService.saveRequest(request);
+        Tenant tenant = request.getTenant();
+        mailService.sendMail(tenant.getEmail(), "Viewing request", "The owner has approved your viewing request");
         return ResponseEntity.ok("OK");
     }
 
@@ -90,11 +96,9 @@ public class OwnerControllerRest {
         Tenant tenant = request.getTenant();
         Property property = request.getProperty();
         property.setTenant(tenant);
-
         propertyService.saveProperty(property);
-
         requestService.deleteRequest(requestid);
-
+        mailService.sendMail(tenant.getEmail(), "Rental request", "The owner has approved your rental request");
         return ResponseEntity.ok("OK");
     }
 

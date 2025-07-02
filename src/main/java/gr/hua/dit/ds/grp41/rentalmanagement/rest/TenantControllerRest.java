@@ -2,10 +2,7 @@ package gr.hua.dit.ds.grp41.rentalmanagement.rest;
 
 import gr.hua.dit.ds.grp41.rentalmanagement.entities.*;
 import gr.hua.dit.ds.grp41.rentalmanagement.repositories.UserRepo;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.OwnerService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.PropertyService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.RequestService;
-import gr.hua.dit.ds.grp41.rentalmanagement.services.TenantService;
+import gr.hua.dit.ds.grp41.rentalmanagement.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -37,6 +34,9 @@ public class TenantControllerRest {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private MailService mailService;
 
     @GetMapping("/showOwnedProperties")
     public List<Property> showOwnedProperties(){
@@ -108,8 +108,8 @@ public class TenantControllerRest {
         rentalRequest.setOwner(owner);
         rentalRequest.setIsViewingApproved(false);
         rentalRequest.setIsRentalRequest(true);
-
         tenantService.saveRequest(rentalRequest);
+        mailService.sendMail(owner.getEmail(), "Rental request", "A user has requested to rent your property");
         return ResponseEntity.ok("OK");
     }
 
@@ -131,6 +131,7 @@ public class TenantControllerRest {
         //rentalRequest.setIsViewingApproved(false);
         rentalRequest.setIsRentalRequest(false);
         tenantService.saveRequest(rentalRequest);
+        mailService.sendMail(owner.getEmail(), "Viewing request", "A user has requested to view your property");
         return ResponseEntity.ok("OK");
     }
 }
